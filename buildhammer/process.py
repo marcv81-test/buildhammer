@@ -80,3 +80,23 @@ def wrap_command(command, dir=None):
         os.chdir(dir_backup)
 
     return rc, stdout.getvalue(), stderr.getvalue()
+
+def error_message(message, rc=None, stdout=None, stderr=None):
+    """Formats a process error message."""
+
+    if rc is not None:
+        message += '\n## return code: ' + str(rc)
+
+    if stdout is not None:
+        message += '\n## stdout:'
+        stdout = stdout.strip()
+        if len(stdout) > 0:
+            message += '\n' + stdout
+
+    if stderr is not None:
+        message += '\n## stderr:'
+        stderr = stderr.strip()
+        if len(stderr) > 0:
+            message += '\n' + stderr
+
+    return message
