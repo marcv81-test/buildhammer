@@ -53,17 +53,20 @@ class Workspace:
                 'Could not add Git remote', rc, stdout, stderr)
             raise Exception(message)
 
-    def checkout(self, reference):
-        """Fetches and checks out a reference from origin."""
+    def checkout(self, reference, depth=1, revision='FETCH_HEAD'):
+        """Fetches and checks out a reference from origin.
+        Can check out a parent revision up to a specified depth."""
 
-        command = 'git fetch --depth 1 origin ' + reference
+        command = 'git fetch origin ' + reference
+        if depth is not None:
+            command += ' --depth ' + str(depth)
         rc, stdout, stderr = p.wrap_command(command, self.dir)
         if rc != 0:
             message = p.error_message(
                 'Could fetch Git reference', rc, stdout, stderr)
             raise Exception(message)
 
-        command = 'git checkout FETCH_HEAD'
+        command = 'git checkout ' + revision
         rc, stdout, stderr = p.wrap_command(command, self.dir)
         if rc != 0:
             message = p.error_message(
